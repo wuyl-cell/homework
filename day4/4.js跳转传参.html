@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js跳转传参</title>
+</head>
+<body>
+<div id="practice">
+    <router-view></router-view>
+</div>
+<script src="js/vue.min.js"></script>
+<script src="js/vue-router.3.0.1(1).js"></script>
+<script>
+    let index = {
+        template:`
+        <div>这是主页面
+        <button @click="goPage">跳转到用户页面</button></div>
+        `,
+        methods:{
+            goPage(){
+                this.$router.push({path: '/user/1'})
+            }
+        }
+    }
+    let user = {
+        template:`
+        <div>这是用户页面
+        <br>
+        js跳转传参的值为： {{ $route.params.id }}
+        </div>
+        `,
+    }
+    let myRouter = new VueRouter({
+        routes: [
+            {path: '/index', component:index},
+            {path: '/user/:id', component:user},
+            {path: '/', redirect:'/index'},
+        ]
+    })
+    new Vue({
+        el: '#practice',
+        data:{},
+        router: myRouter,
+    })
+</script>
+</body>
+</html>

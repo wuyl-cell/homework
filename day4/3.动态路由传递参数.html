@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>动态路由传递参数</title>
+</head>
+<body>
+<div id="practice">
+    <h3>动态路由参数传递</h3>
+    <hr>
+    <router-link to="/index">主页</router-link>
+    <router-link to="/list/5">信息页</router-link>
+    <router-view></router-view>
+</div>
+<script src="js/vue.min.js"></script>
+<script src="js/vue-router.3.0.1(1).js"></script>
+<script>
+    let index = {
+        template: `
+        <div>这是主页面</div>
+        `,
+    }
+    let list = {
+        template: `
+        <div>这是信息页
+        <br>
+        <table border="2">
+          <tr>
+            <td>id</td>
+            <td>name</td>
+            <td>操作</td>
+          </tr>
+          <tr v-for="user in users" :key="user.id">
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td><button @click="del(user.id)">操作</button></td>
+          </tr>
+        </table>
+        这是动态路由传递的参数：{{ $route.params.id}}
+        </div>
+
+        `,
+        data(){
+            return {
+                users: [{'id':1, 'username': 'ewe'},
+                    {'id':2, 'username': 'fdew'},
+                    {'id':3, 'username': 'cds'}]
+            }
+        },
+        methods:{
+            del(id){
+                this.users.some(
+                    (users, i) => {
+                        if(user.id == id){
+                            this.users.splice(i, 1)
+                            return true
+                        }
+                    }
+                )
+            }
+        }
+    }
+    let myRouter = new VueRouter({
+        routes:[
+            {path: '/index', component: index},
+            {path: '/list/:id', component: list},
+        ]
+    })
+    new Vue({
+        el: '#practice',
+        data: {},
+        router: myRouter,
+    })
+</script>
+</body>
+</html>

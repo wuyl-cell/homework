@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue路由的使用</title>
+</head>
+<body>
+<div id="practice">
+    <h3>这是显示vue路由的页面</h3>
+    <hr>
+    <router-link to="/index">主页面</router-link>
+    <router-link to="/com">信息页</router-link>
+    <router-view></router-view>
+</div>
+<script src="js/vue.min.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script>
+    let index = {
+        template:`
+            <div>这是组件路由的主页</div>
+        `,
+    }
+    let com = {
+        template:`
+            <div>这是组件的另一个页面
+            <table border="2">
+              <tr>
+              <td>id</td>
+              <td>name</td>
+                <td>操作</td>
+              </tr>
+              <tr v-for="user in users" :key="user.id">
+              <td>{{user.id}}</td>
+              <td>{{user.name}}</td>
+                <td><button @click="del(user.id)"> 删除</button></td>
+              </tr>
+            </table>
+            </div>
+        `,
+        data(){
+            return{
+                users: [{'id':1, 'name': '111'},
+                    {'id':2, 'name': '222'},
+                    {'id':3, 'name': '333'}]
+            }
+        },
+        methods: {
+            del(id){
+                    this.users.some((user, i)=>{
+                        if(user.id==id){
+                            this.users.splice(i, 1)
+                            //在数组的some方法中，如果return true，就会立即终止这个数组的后续循环
+                            return true
+                        }
+                    })
+                }
+            }
+
+    }
+    let myRouter = new VueRouter({
+        routes: [
+            {path: '/index', component:index},
+            {path: '/com', component:com},
+            {path: '/', component: index},
+            {path: '/*', component: index},
+        ]
+    })
+    new Vue({
+        el: '#practice',
+        router: myRouter,
+    })
+</script>
+</body>
+</html>
